@@ -55,7 +55,13 @@ config_after_install() {
             echo -e "${green}密码: ${config_password}${plain}"
             echo -e "${green}端口: ${config_port}${plain}"
             echo -e "${green}面板路径: ${config_webBasePath}${plain}"
-            echo -e "${green}访问面板URL: http://${server_ip}:${config_port}/${config_webBasePath}${plain}"
+            # 检测是否为IPv6地址并正确格式化URL
+            if [[ "${server_ip}" == *:* ]]; then
+                local formatted_ip="[${server_ip}]"
+            else
+                local formatted_ip="${server_ip}"
+            fi
+            echo -e "${green}访问面板URL: http://${formatted_ip}:${config_port}/${config_webBasePath}${plain}"
             echo -e "###############################################"
             echo -e "${yellow}如果你忘记了登录信息, 你可以使用命令“x-ui settings”${plain}"
         else
@@ -63,7 +69,13 @@ config_after_install() {
             echo -e "${yellow}面板路径缺失或太短, 正在生成一个新的...${plain}"
             /usr/local/x-ui/x-ui setting -webBasePath "${config_webBasePath}"
             echo -e "${green}新的面板路径: ${config_webBasePath}${plain}"
-            echo -e "${green}访问面板URL: http://${server_ip}:${existing_port}/${config_webBasePath}${plain}"
+            # 检测是否为IPv6地址并正确格式化URL
+            if [[ "${server_ip}" == *:* ]]; then
+                local formatted_ip="[${server_ip}]"
+            else
+                local formatted_ip="${server_ip}"
+            fi
+            echo -e "${green}访问面板URL: http://${formatted_ip}:${existing_port}/${config_webBasePath}${plain}"
         fi
     else
         if [[ "$existing_username" == "admin" && "$existing_password" == "admin" ]]; then
