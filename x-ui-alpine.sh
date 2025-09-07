@@ -258,10 +258,22 @@ check_config() {
         if [[ "$domain" =~ ^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$ ]]; then
             echo -e "${green}访问面板URL: https://${domain}:${existing_port}${existing_webBasePath}${plain}"
         else
-            echo -e "${green}访问面板URL: https://${server_ip}:${existing_port}${existing_webBasePath}${plain}"
+            # 检测是否为IPv6地址并正确格式化URL
+            if [[ "${server_ip}" == *:* ]]; then
+                local formatted_ip="[${server_ip}]"
+            else
+                local formatted_ip="${server_ip}"
+            fi
+            echo -e "${green}访问面板URL: https://${formatted_ip}:${existing_port}${existing_webBasePath}${plain}"
         fi
     else
-        echo -e "${green}访问面板URL: http://${server_ip}:${existing_port}${existing_webBasePath}${plain}"
+        # 检测是否为IPv6地址并正确格式化URL
+        if [[ "${server_ip}" == *:* ]]; then
+            local formatted_ip="[${server_ip}]"
+        else
+            local formatted_ip="${server_ip}"
+        fi
+        echo -e "${green}访问面板URL: http://${formatted_ip}:${existing_port}${existing_webBasePath}${plain}"
     fi
 }
 
