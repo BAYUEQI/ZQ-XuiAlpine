@@ -249,7 +249,8 @@ check_config() {
     local existing_webBasePath=$(echo "$info" | grep -Eo 'webBasePath: .+' | awk '{print $2}')
     local existing_port=$(echo "$info" | grep -Eo 'port: .+' | awk '{print $2}')
     local existing_cert=$(/usr/local/x-ui/x-ui setting -getCert true | grep -Eo 'cert: .+' | awk '{print $2}')
-    local server_ip=$(curl -s https://api.ipify.org)
+    # 使用api64.ipify.org以同时支持IPv4和IPv6
+    local server_ip=$(curl -s https://api64.ipify.org)
 
     if [[ -n "$existing_cert" ]]; then
         local domain=$(basename "$(dirname "$existing_cert")")
